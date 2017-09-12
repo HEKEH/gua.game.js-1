@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>game 1</title>
+        <style media="screen">
+            canvas {
+                border: 1px black solid;
+            }
+        </style>
+        <!-- gua game 相关文件 -->
+        <script src='guagame/utils.js'></script>
+        <script src='guagame/mouse.js'></script>
+        <script src='guagame/gua_game.js'></script>
+        <script src='guagame/gua_scene.js'></script>
+        <script src='guagame/gua_image.js'></script>
+        <script src='guagame/gua_label.js'></script>
+        <script src='guagame/gua_animation.js'></script>
+        <script src='guagame/gua_particle_system.js'></script>
+        <!-- 场景文件 -->
+        <script src='scene/main/paddle.js'></script>
+        <script src='scene/main/ball.js'></script>
+        <script src='scene/main/block.js'></script>
+        <script src='scene/main/scene.js'></script>
+        <!-- 结束和标题场景 -->
+        <script src='scene/end/scene_end.js'></script>
+        <script src='scene/title/scene_title.js'></script>
+        <!-- 配置数据 -->
+        <script src='config.js'></script>
+    </head>
+    <body>
+        <canvas id="id-canvas" width="288" height="512"></canvas>
+        <hr>
+        <input id=id-input-speed type="range" min="2" value="3">
+        <div class="">
+            <!-- <textarea id="id-text-log" rows="20" cols="50"></textarea> -->
+        </div>
+        <div class="gua-controls">
+        </div>
+        <script src=main.js></script>
+        <script>
+            var es = sel => document.querySelectorAll(sel);
+            var bindAll = function(selector, eventName, callback) {
+                var elements = document.querySelectorAll(selector)
+                for (var i = 0; i < elements.length; i++) {
+                    var e = elements[i]
+                    e.addEventListener(eventName, callback)
+                }
+            }
+            var templateControl = function(key,item) {
+                var t = `<div class="">
+                    <label>
+                        <input class="gua-auto-slider" type="range"
+                            min='1'
+                            max='300'
+                            value="${item.value}"
+                            data-value='config.${key}'>
+                        ${item._comment}: <span class="gua-label"></span>
+                    </label>
+                </div>`
+                return t
+            }
+
+            var insertControls = function() {
+                var div = e('.gua-controls')
+                var keys = Object.keys(config)
+                for (var k of keys) {
+                    var item = config[k]
+                    var html = templateControl(k, item)
+                    div.insertAdjacentHTML('beforeend',html)
+                }
+            }
+
+            var bindEvents = function() {
+                bindAll('.gua-auto-slider', 'input', function(event) {
+                    var target = event.target
+                    var bindVar = target.dataset.value
+                    var v = target.value
+                    eval(bindVar + '.value =' + v)
+                    //
+                    var label = target.closest('label').querySelector('.gua-label')
+                    label.innerText = v
+                })
+            }
+            var __main = function () {
+                insertControls()
+                bindEvents()
+
+            }
+            __main()
+        </script>
+    </body>
+</html>
